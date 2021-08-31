@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+authors:
+  - family-names: "Ferrer-Paris"
+    given-names: "José R."
+    orcid: https://orcid.org/0000-0002-9554-3395
+title: "IUCN Red List of Ecosystems of the forest Macrogroups of the Americas: GIS data"
+message: If you use this software, please cite both the article from preferred-citation and the dataset itself.
+preferred-citation:
+  authors:
+    - family-names: Ferrer-Paris
+      given-names: José R.
+    - family-names: Zager
+      given-names: Irene
+    - family-names: Keith
+      given-names: David A.
+    - family-names: Oliveira-Miranda
+      given-names: M.A.
+    - family-names: Rodríguez
+      given-names: Jon Paul
+    - family-names: Josse
+      given-names: Carmen
+    - family-names: González-Gil
+      given-names: Mario
+    - family-names: Miller
+      given-names: Rebecca M.
+    - family-names: Zambrana-Torrelio
+      given-names: Carlos
+    - family-names: Barrow
+      given-names: E.
+  title: An ecosystem risk assessment of temperate and tropical forests of the Americas with an outlook on future conservation strategies. Conserv. Lett. 12.
+  doi: 10.1111/conl.12623
+  type: article
