@@ -21,7 +21,7 @@ http://hub.arcgis.com/datasets/Natureserve::southamerica-ivc-macrogroups-potenti
 
 ```sh
 
-source ~/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
+source ~/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 cp $GISDATA/ecosistemas/NatureServe/*potential*tif.lpk $WORKDIR
 7z x SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m_tif.lpk

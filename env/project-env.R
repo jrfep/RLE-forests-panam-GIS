@@ -1,5 +1,5 @@
 #!R --vanilla
-projectname <- "RLE-forests-panam-GIS"
+projectname <- "RLE-forests-panam-GIS/"
 projectfolder <- "proyectos/IUCN"
 
 if (Sys.getenv("GISDATA") != "") {

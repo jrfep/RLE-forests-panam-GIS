@@ -9,7 +9,7 @@ In this step we use _GRASS GIS_  and functions in the _GDAL_ library to create t
 Here we create a GRASS GIS location for the analysis
 
 ```sh
-source $HOME/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 conda deactivate
 
@@ -32,6 +32,10 @@ v.in.ogr --overwrite -o input=Countries.shp output=Countries snap=1e-05
 Focus on the Dry Forest macrogroups and reclassify the raster map:
 
 ```sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GIS//env/project-env.sh
+cd $WORKDIR
+conda deactivate
+
 grass --text $GISDB/IVC/PERMANENT
 
 g.region n=3420276.75817 s=-3178511.8677 w=-3391921.6167 e=4905190.74598
@@ -77,7 +81,7 @@ http://www.earthenginepartners.appspot.com/science-2013-global-forest/download.h
 And we use functions from the GDAL library to project from the virtual raster tiles to the geotiff format:
 
 ```sh
-source $HOME/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 conda deactivate
 
@@ -128,7 +132,7 @@ From:
 And we use functions from the GDAL library to project the landcover layer:
 
 ```sh
-source $HOME/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 conda deactivate
 grass --text $GISDB/IVC/CGLS
@@ -152,7 +156,7 @@ We downloaded data from: http://www.earthstat.org/cropland-pasture-area-2000/
 And we use functions from the GDAL library to project the original data to the Robinson projection:
 
 ```sh
-source $HOME/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 conda deactivate
 grass --text $GISDB/IVC/Earthstats
@@ -177,7 +181,7 @@ We downloaded data from: https://ghsl.jrc.ec.europa.eu/dataToolsOverview.php
 And we use functions from the GDAL library to reproject the raster data:
 
 ```sh
-source $HOME/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 conda deactivate
 grass --text $GISDB/IVC/GHSL

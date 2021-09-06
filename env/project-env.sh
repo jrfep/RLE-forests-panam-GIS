@@ -1,21 +1,21 @@
 
 export MIHOST=$(hostname -s)
 
-export PROJECTNAME=RLE-forests-panam-GIS
+export PROJECTNAME=RLE-forests-panam-GIS/
 export PROJECTFOLDER=proyectos/IUCN
 export SCRIPTDIR=${HOME}/${PROJECTFOLDER}/${PROJECTNAME}
 
 case $MIHOST in
 terra)
   export GISDATA=/opt/gisdata
-  export GISDB=/opt/gisdb/ecosphere
+  export GISDB=/opt/gisdb/
   export WORKDIR=$HOME/tmp/$PROJECTNAME
   source $HOME/.profile
   export SRCDIR=$HOME/Cloudstor/UNSW/data/
   ;;
 roraima)
   export GISDATA=$HOME/gisdata
-  export GISDB=$HOME/gisdb/ecosphere
+  export GISDB=$HOME/gisdb/
   export WORKDIR=$HOME/tmp/$PROJECTNAME
   export SRCDIR=/Volumes/Teradactylo/gisdata
   ;;

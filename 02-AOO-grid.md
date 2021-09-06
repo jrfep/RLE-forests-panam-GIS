@@ -7,7 +7,7 @@ In this step we use _GRASS GIS_  and functions in the _GDAL_ library to create a
 We use this 10x10km grid for calculation of Area of Occupancy (AOO) to inform criterion B and as a basis for disaggregating spatial analysis for other criteria.
 
 ```sh
-source $HOME/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 conda deactivate
 grass --text $GISDB/IVC/criterionB
@@ -18,7 +18,6 @@ r.stats -acn input=IVC_NS_v7@PERMANENT,AOO_rgrid output=AOOcalc.tab
 
 v.out.ogr input=AOO_grid@PERMANENT output=AOO_grid format=ESRI_Shapefile
 
-psql -d IUCN -c "CREATE SCHEMA ivc_rle"
 
 ogr2ogr -f "PostgreSQL" PG:"host=$DBHOST user=$DBUSER dbname=""$DBNAME""" -lco SCHEMA=ivc_rle AOO_grid AOO_grid -nln aoo_grid
 
