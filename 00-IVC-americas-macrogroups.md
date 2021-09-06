@@ -20,7 +20,8 @@ http://hub.arcgis.com/datasets/Natureserve::southamerica-ivc-macrogroups-potenti
  The original files of the potential distribution of the Macrogroups in geotiff format were delivered by NatureServe, files were encoded in .lpk format, I extracted them using the 7z extraction command.
 
 ```sh
-source ~/proyectos/IUCN/imperiled-dry-forest-americas/env/project-env.sh
+
+source ~/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
 cd $WORKDIR
 cp $GISDATA/ecosistemas/NatureServe/*potential*tif.lpk $WORKDIR
 7z x SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m_tif.lpk

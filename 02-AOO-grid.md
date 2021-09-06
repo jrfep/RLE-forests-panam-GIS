@@ -7,7 +7,7 @@ In this step we use _GRASS GIS_  and functions in the _GDAL_ library to create a
 We use this 10x10km grid for calculation of Area of Occupancy (AOO) to inform criterion B and as a basis for disaggregating spatial analysis for other criteria.
 
 ```sh
-source $HOME/proyectos/IUCN/imperiled-dry-forest-americas/env/project-env.sh
+source $HOME/proyectos/IUCN/RLE-forests-panam-GISenv/project-env.sh
 cd $WORKDIR
 conda deactivate
 grass --text $GISDB/IVC/criterionB
