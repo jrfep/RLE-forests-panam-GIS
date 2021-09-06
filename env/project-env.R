@@ -35,3 +35,13 @@ if (!file.exists(work.dir)) {
   system(sprintf("mkdir -p %s",work.dir))
 }
 setwd(work.dir)
+
+if (file.exists("~/.database.ini")) {
+   tmp <-     system("grep -A4 psqlaws $HOME/.database.ini",intern=TRUE)[-1]
+   get.dbinfo <- gsub("[a-z]+=","",tmp)
+   names(get.dbinfo) <- gsub("([a-z]+)=.*","\\1",tmp)
+   tmp <-     system("grep -A4 IUCNdb $HOME/.database.ini",intern=TRUE)[-1]
+   rle.dbinfo <- gsub("[a-z]+=","",tmp)
+   names(rle.dbinfo) <- gsub("([a-z]+)=.*","\\1",tmp)
+   rm(tmp)
+}
