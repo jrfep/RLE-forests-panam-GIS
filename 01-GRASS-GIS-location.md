@@ -32,6 +32,8 @@ v.in.ogr --overwrite -o input=Countries.shp output=Countries snap=1e-05
 Focus on the Dry Forest macrogroups and reclassify the raster map:
 
 ```sh
+grass --text $GISDB/IVC/PERMANENT
+
 g.region n=3420276.75817 s=-3178511.8677 w=-3391921.6167 e=4905190.74598
 
  psql -h $DBHOST -d $DBNAME -U $DBUSER -Atn -c "select value, mg_key || ' ' || macrogroup from ivc_americas WHERE ivc_format='Tropical Seasonally Dry Forest'" > tmp
