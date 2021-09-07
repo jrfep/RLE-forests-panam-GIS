@@ -24,6 +24,7 @@ http://hub.arcgis.com/datasets/Natureserve::southamerica-ivc-macrogroups-potenti
 source ~/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 cp $GISDATA/ecosistemas/NatureServe/*potential*tif.lpk $WORKDIR
+cp $GISDATA/ecosistemas/Natureserve/IUCN/NAC/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m_tif.lpk $WORKDIR
 7z x SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m_tif.lpk
 7z x NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m_tif.lpk
 ```
@@ -65,6 +66,10 @@ Other information is available in the attribute table from the GeoTiff raster fi
 ##R --vanilla
 require(dplyr)
 require(foreign)
+require(RPostgreSQL)
+
+source(sprintf("%s/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.R",Sys.getenv("HOME")))
+
 work.dir <- Sys.getenv("WORKDIR")
 setwd(work.dir)
 ## make sure to have the NatureServe files extracted here
@@ -86,10 +91,38 @@ IVC_eco = tmp %>%
     group_by_at(names(tmp)[-grep("Count", names(tmp))]) %>%
       summarise(total = sum(Count, na.rm = TRUE))
 
-#dbWriteTable(con,"tmptable3",IVC_eco,overwrite=T,row.names = FALSE)
-#qry <- "INSERT INTO ivc_americas SELECT * FROM tmptable3 ON CONFLICT (mg_key) DO NOTHING"
-#dbSendQuery(con,qry)
-#qry <- "DROP TABLE tmptable3"
-#dbSendQuery(con,qry)
+
+
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, dbname = rle.dbinfo[['database']],
+                 host = rle.dbinfo[['host']], port = rle.dbinfo[['port']],
+                 user = rle.dbinfo[['user']])
+
+dbWriteTable(con,c("ivc_rle","raster_attribute_table"),
+IVC_eco,overwrite=T,row.names = FALSE)
+dbDisconnect(con)
+```
+
+There are some discrepancies in nomenclature between the database and the raster attribute table. We login to postgres `psql -h $DBHOST -d $DBNAME -U $DBUSER`, and check these:
+
+```sql
+CREATE TEMPORARY TABLE check_macrogroups AS
+SELECT "Value",ivc_value,mg_key,mg_hierarc,parent||'-'||name AS code_name FROM ivc_rle.raster_attribute_table FULL JOIN ivc_rle.macrogroups USING(mg_key);
+
+
+-- these are not mapped:
+SELECT * FROM check_mqacrogroups WHERE mg_hierarc IS NULL AND code_name like '1.A%' ORDER BY code_name;
+SELECT * FROM check_macrogroups WHERE mg_hierarc IS NULL AND code_name like '1.B%' ORDER BY ivc_value;
+-- also there is an error, value:11 appears to map large rivers or wetlands
+-- it does not correspond to 1.B.1.Nd.11 - Madrean Montane Forest & Woodland
+
+-- we will reset these values:
+UPDATE ivc_rle.macrogroups set ivc_value=NULL where ivc_value IN (
+SELECT ivc_value FROM check_macrogroups WHERE mg_hierarc IS NULL
+);
+
+-- other inconsistencies in nomenclature
+SELECT * FROM check_macrogroups WHERE code_name is NULL ORDER BY mg_hierarc;
+SELECT * FROM check_macrogroups WHERE mg_hierarc != code_name ORDER BY code_name;
 
 ```
