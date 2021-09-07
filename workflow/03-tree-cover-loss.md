@@ -60,15 +60,15 @@ ogrinfo -al -geom=no -sql "SELECT * FROM AOO_grid WHERE cat=609229" AOO_grid/ | 
 
 ```
 
+We can run this in the background for several macrogroups filtering by formation and using limit.
 
 ```{r}
-for k in $(psql -Atn -h $DBHOST -d $DBNAME -U $DBUSER -c "select ivc_value from ivc_rle.macrogroups WHERE parent like '1.A.1%' AND mg_key IN (SELECT DISTINCT mg_key FROM ivc_rle.assessment WHERE country='global' AND ref_code='Ferrer-Paris et al. 2019') order by ivc_value")
+cd $WORKDIR
+for k in $(psql -Atn -h $DBHOST -d $DBNAME -U $DBUSER -c "select ivc_value from ivc_rle.macrogroups WHERE parent like '1.B.3%' AND mg_key IN (SELECT DISTINCT mg_key FROM ivc_rle.assessment WHERE country='global' AND ref_code='Ferrer-Paris et al. 2019') order by ivc_value LIMIT 3")
 do
    echo $k
-  ##nohup Rscript --vanilla $SCRIPTDIR/inc/R/calculate-GFC-per-AOO-cat.R $k &
-  Rscript --vanilla $SCRIPTDIR/inc/R/calculate-GFC-per-AOO-cat.R $k
+  nohup Rscript --vanilla $SCRIPTDIR/inc/R/calculate-GFC-per-AOO-cat.R $k > output-gfc-$k &
+  ## Rscript --vanilla $SCRIPTDIR/inc/R/calculate-GFC-per-AOO-cat.R $k
   echo "LISTO"
 done
-
-
 ```

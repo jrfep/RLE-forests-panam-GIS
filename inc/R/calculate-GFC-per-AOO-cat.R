@@ -31,7 +31,7 @@ qry <- sprintf("SELECT aoo_cat FROM ivc_rle.aoo_ivc WHERE ivc_value='%s' AND aoo
 grds <- dbGetQuery(con,qry)$aoo_cat
 
 
-for (g in grds) {
+for (g in sample(grds)) {
    system("rm -f tmp_*.tif")
    # check again to avoid duplicates in parallel run
    check <- dbGetQuery(con,sprintf("select count(*) from ivc_rle.aoo_gfc where aoo_cat ='%s'",g))
