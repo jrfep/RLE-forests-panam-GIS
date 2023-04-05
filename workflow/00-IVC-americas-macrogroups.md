@@ -21,7 +21,7 @@ http://hub.arcgis.com/datasets/Natureserve::southamerica-ivc-macrogroups-potenti
 
 ```sh
 
-source ~/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.sh
+source ~/proyectos/IUCN-RLE/RLE-forests-panam-GIS/env/project-env.sh
 cd $WORKDIR
 cp $GISDATA/ecosistemas/NatureServe/*potential*tif.lpk $WORKDIR
 cp $GISDATA/ecosistemas/Natureserve/IUCN/NAC/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m_tif.lpk $WORKDIR
@@ -44,9 +44,9 @@ In order to combine both layers in one file with a common projection, I used gda
 
 gdalwarp -co "COMPRESS=LZW" -t_srs '+proj=robin +lon_0=-80 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0' commondata/raster_data/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m.tif commondata/raster_data/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m.tif IVC_NS_v7_270m_robin.tif
 
-rm -r commondata/ esriinfo/ v10 v103/
+#rm -r commondata/ esriinfo/ v10 v103/
 
-rm *lpk
+#rm *lpk
 
 ```
 
@@ -68,7 +68,7 @@ require(dplyr)
 require(foreign)
 require(RPostgreSQL)
 
-source(sprintf("%s/proyectos/IUCN/RLE-forests-panam-GIS/env/project-env.R",Sys.getenv("HOME")))
+source(sprintf("%s/proyectos/IUCN-RLE/RLE-forests-panam-GIS/env/project-env.R",Sys.getenv("HOME")))
 
 work.dir <- Sys.getenv("WORKDIR")
 setwd(work.dir)
@@ -86,12 +86,15 @@ unique(tmp$mg_key)
 with(tmp,aggregate(Count,list(Value,mg_key),sum))
 
 
-IVC_eco = tmp %>%
+IVC_eco <- tmp %>%
   filter(!is.na(mg_key)) %>%
     group_by_at(names(tmp)[-grep("Count", names(tmp))]) %>%
       summarise(total = sum(Count, na.rm = TRUE))
 
-
+IVC_eco %>% 
+  filter(grepl("Swamp",macrogroup)) %>%
+  ungroup  %>%                    
+  select(Value,macrogroup)
 
 drv <- dbDriver("PostgreSQL")
 con <- dbConnect(drv, dbname = rle.dbinfo[['database']],
