@@ -25,7 +25,7 @@ roraima)
     export SHAREDSCRATCH=/srv/scratch/cesdata
     export GISDATA=$SHAREDSCRATCH/gisdata
     export GISDB=$SHAREDSCRATCH/gisdb
-    export WORKDIR=$SHAREDSCRATCH/output/$PROJECT
+    export WORKDIR=$SHAREDSCRATCH/output/$PROJECTNAME
     export SRCDIR=$GISDATA
 
     source $HOME/.secrets
