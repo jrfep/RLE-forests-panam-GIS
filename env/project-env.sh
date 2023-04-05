@@ -2,7 +2,7 @@
 export MIHOST=$(hostname -s)
 
 export PROJECTNAME=RLE-forests-panam-GIS/
-export PROJECTFOLDER=proyectos/IUCN
+export PROJECTFOLDER=proyectos/IUCN-RLE
 export SCRIPTDIR=${HOME}/${PROJECTFOLDER}/${PROJECTNAME}
 
 case $MIHOST in
