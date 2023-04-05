@@ -32,8 +32,10 @@ do
     gdal_calc.py -A $WORKDIR/IVC_NS_v7_270m_robin.tif \
     --outfile=M${MCDG}.tif \
     --calc="(A==${MCDG})*1" --quiet \
-    --format=GTiff --type=Byte --creation-option="NBITS=1" \
+    --format=GTiff \
     --creation-option="COMPRESS=DEFLATE" --NoDataValue=0
+    #--type=Byte --creation-option="NBITS=1" \ # not needed?
+    
     for res in 5 3 1 
     do 
         gdalwarp -tr ${res}000 ${res}000 -r max -co "COMPRESS=DEFLATE" \
@@ -42,9 +44,10 @@ do
         ogr2ogr M${MCDG}-${res}km-union.gpkg  M${MCDG}-${res}km.gpkg \
         -dialect sqlite -sql "SELECT 'M${MCDG}' AS mg_key, $IUCNCAT, ST_union(geom) AS geom FROM out " \
         -nln "rle_assessment" -t_srs "EPSG:4326" \
-	-simplify ${res}000\
 	-mo CREATOR="JR Ferrer-Paris" \
-        -mo CITATION="Ferrer-Paris, J. R., Zager, I., Keith, D. A., Oliveira-Miranda, M., Rodríguez, J. P., Josse, C., González-Gil, M., Miller, R. M., Zambrana-Torrelio, C., & Barrow, E. An ecosystem risk assessment of temperate and tropical forests of the Americas with an outlook on future conservation strategies. Conserv. Lett. 12.. https://doi.org/10.1111/conl.12623"
+        -mo CITATION="Ferrer-Paris, J. R., Zager, I., Keith, D. A., Oliveira-Miranda, M., Rodríguez, J. P., Josse, C., González-Gil, M., Miller, R. M., Zambrana-Torrelio, C., & Barrow, E. An ecosystem risk assessment of temperate and tropical forests of the Americas with an outlook on future conservation strategies. Conserv. Lett. 12.. https://doi.org/10.1111/conl.12623"\
+	-mo NOTE="Map shows potential distribution. This is a simplified vector in lower resolution than the original raster file."
+	# -simplify ${res}000\ # this step is redundant
     done
 done
 
