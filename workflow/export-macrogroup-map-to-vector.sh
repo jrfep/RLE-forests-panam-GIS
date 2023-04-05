@@ -1,6 +1,14 @@
-# 640 is Amazon Delta Swamp Forest   
+# 640 is Amazon Delta Swamp Forest 
+
+source ~/proyectos/IUCN-RLE/RLE-forests-panam-GIS/env/project-env.sh
+cd $WORKDIR
+cp $GISDATA/vegetation/regional/IVC-EcoVeg/Americas/IVC_NS_v7_270m_robin.tif $WORKDIR
+
 mkdir vector-data-potential-dist
 cd vector-data-potential-dist
+
+module add gdal 
+
 for MCDG in 640 563 572
 do
     gdal_calc.py -A $WORKDIR/IVC_NS_v7_270m_robin.tif \
@@ -20,14 +28,3 @@ done
 #gdal_polygonize.py M640.tif M640.gpkg -f "GPKG"
 
 
-
-
-
-gdal_polygonize.py M640_3km.tif M640_3km.gpkg -f "GPKG"
-
-
-
-
-  gdal_calc.py -A IVC_NS_v7_270m_robin.tif --outfile=M${MCDG}.tif --calc="(A==${MCDG})*1" --format=GTiff --type=Byte --creation-option="NBITS=1" --creation-option="COMPRESS=DEFLATE" --NoDataValue=0
-  gdal_polygonize.py M${MCDG}.tif M${MCDG}.shp -f "ESRI shapefile"
-done
