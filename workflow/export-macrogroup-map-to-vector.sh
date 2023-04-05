@@ -5,7 +5,11 @@ cd $WORKDIR
 cp $GISDATA/vegetation/regional/IVC-EcoVeg/Americas/IVC_NS_v7_270m_robin.tif $WORKDIR
 wget --continue "https://figshare.com/ndownloader/files/13874333" --output-document="MacrogroupsCountry.rda"
 
+module load r/4.2.2 
+
 Rscript --vanilla -e 'load("MacrogroupsCountry.rda"); write.csv(Macrogroups.Global,file="macrogroups_global.csv")'
+
+module add gdal
 
 ogr2ogr -f CSV query-IVC-sam \
     $GISDATA/vegetation/regional/IVC-EcoVeg/SAM/commondata/raster_data/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m.tif.vat.dbf \
@@ -22,7 +26,7 @@ grep M${MCDG} query-IVC-sam/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v
 mkdir -p vector-data-potential-dist
 cd vector-data-potential-dist
 
-module add gdal 
+
 
 for MCDG in 640 # 563 572
 do
