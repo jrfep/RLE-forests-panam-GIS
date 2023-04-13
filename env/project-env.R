@@ -28,7 +28,7 @@ if (Sys.getenv("GISDATA") != "") {
       {
          if (file.exists("/srv/scratch/cesdata")) {
             gis.data <- sprintf("/srv/scratch/cesdata/gisdata/")
-            work.dir <- sprintf("/srv/scratch/%s/tmp/%s/",username,projectname)
+            work.dir <- sprintf("/srv/scratch/cesdata/output/%s/",projectname)
          } else {
             stop("Can't figure out where I am, please customize `project-env.R` script\n")
          }

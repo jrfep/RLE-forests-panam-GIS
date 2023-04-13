@@ -10,16 +10,16 @@ library(osfr)
 osfcode <- Sys.getenv("OSF_PROJECT")
 osf_project <- osf_retrieve_node(sprintf("https://osf.io/%s", osfcode))
 osf_folders <- osf_ls_files(osf_project, 
-    path="vector-data-potential-dist")
+    pattern="vector-data-potential-dist")
 
 
-source.file <- sprintf(
-    "%s/vector-data-potential-dist/M134-3km-union.gpkg",
-    Sys.getenv("TMPDIR")
-    )
+source.dir <- "vector-data-potential-dist"
+setwd(work.dir)
 
-gbm_data_file  <- 
-    osf_upload(
-        osf_folders, 
-        path = source.file, 
-        conflicts="skip")
+upl_data_file  <- 
+  osf_upload(
+    osf_project, 
+    path = source.dir,
+    conflict = "skip")
+
+

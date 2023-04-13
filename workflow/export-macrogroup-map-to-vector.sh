@@ -2,6 +2,7 @@
 
 source ~/proyectos/IUCN-RLE/RLE-forests-panam-GIS/env/project-env.sh
 cd $TMPDIR
+
 cp $GISDATA/vegetation/regional/IVC-EcoVeg/Americas/IVC_NS_v7_270m_robin.tif $TMPDIR
 wget --continue "https://figshare.com/ndownloader/files/13874333" --output-document="MacrogroupsCountry.rda"
 
@@ -23,12 +24,14 @@ ogr2ogr -f CSV query-IVC-sam \
 
 
 mkdir -p vector-data-potential-dist
+mkdir $WORKDIR/vector-data-potential-dist
+
 cd vector-data-potential-dist
 
-for MCDG in $(awk -F "," '/1.A.1/{print $1}' ../query-IVC-nac/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m.tif.vat.csv | sed -e s/\"//g)
+for MCDG in $(awk -F "," '/1.A.2/{print $1}' ../query-IVC-sam/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m.tif.vat.csv | sed -e s/\"//g)
 do
     IUCNCAT=$(awk  -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '/'$MCDG'/{ print $5" AS mg_hierarc, "$22" as IUCN_CAT, "$23" as IUCN_BOUNDS, "$24" as IUCN_criteria" }' ../macrogroups_global.csv| sed -e s/NA/NULL/g)
-    FILENAME=$(awk  -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '/'$MCDG'/{ print $4 }' ../macrogroups_global.csv| sed -e s/ /-/g)
+    FILENAME=$(awk  -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '/'$MCDG'/{ print $5 }' ../macrogroups_global.csv| sed -e s/\ /-/g | tr -d \")
     echo $FILENAME
 
     gdal_calc.py -A $WORKDIR/IVC_NS_v7_270m_robin.tif \
@@ -38,18 +41,20 @@ do
     --creation-option="COMPRESS=DEFLATE" --NoDataValue=0
     #--type=Byte --creation-option="NBITS=1" \ # not needed?
     
-    for res in 5 3 1 
+    for res in 1 # not doing 3 and 5? 
     do 
         gdalwarp -tr ${res}000 ${res}000 -r max -co "COMPRESS=DEFLATE" \
             M${MCDG}.tif M${MCDG}-${res}km.tif
         gdal_polygonize.py M${MCDG}-${res}km.tif M${MCDG}-${res}km.gpkg -f "GPKG"
-        ogr2ogr M${MCDG}-${res}km-union.gpkg  M${MCDG}-${res}km.gpkg \
+        ogr2ogr ${FILENAME}-${res}km.gpkg  M${MCDG}-${res}km.gpkg \
         -dialect sqlite -sql "SELECT 'M${MCDG}' AS mg_key, $IUCNCAT, ST_union(geom) AS geom FROM out " \
         -nln "rle_assessment" -t_srs "EPSG:4326" \
 	-mo CREATOR="JR Ferrer-Paris" \
         -mo CITATION="Ferrer-Paris, J. R., Zager, I., Keith, D. A., Oliveira-Miranda, M., Rodríguez, J. P., Josse, C., González-Gil, M., Miller, R. M., Zambrana-Torrelio, C., & Barrow, E. An ecosystem risk assessment of temperate and tropical forests of the Americas with an outlook on future conservation strategies. Conserv. Lett. 12.. https://doi.org/10.1111/conl.12623"\
 	-mo NOTE="Map shows potential distribution. This is a simplified vector in lower resolution than the original raster file."
 	# -simplify ${res}000\ # this step is redundant
+
+	mv ${FILENAME}-${res}km.gpkg $WORKDIR/vector-data-potential-dist
     done
 done
 
