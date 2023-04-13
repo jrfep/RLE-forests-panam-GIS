@@ -1,0 +1,30 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+[OSF](https://osf.io/dashboard) is a free and open source web application that provides a space for researchers to collaboratively store, manage, and share their research materials (e.g. data, code, protocols).
+
+## OSF with R
+
+First, we run the project environment script:
+
+```{r}
+source(sprintf("%s/proyectos/IUCN-RLE/RLE-forests-panam-GIS/env/project-env.R",Sys.getenv("HOME")))
+```
+
+This script adds an environment variable called `OSF_PROJECT` with the code of the OSF Project. We will use this to locate our **project** and access cloud-based storage bucket where files can be stored and organized into directories.
+
+```{r}
+library(dplyr)
+library(osfr)
+osfcode <- Sys.getenv("OSF_PROJECT")
+osf_project <- osf_retrieve_node(sprintf("https://osf.io/%s", osfcode))
+
+```
+
+We can list files under one project or project component using the `osf_ls_files` function:
+
+```{r}
+osf_ls_files(osf_project)
+```

@@ -28,6 +28,8 @@ cd vector-data-potential-dist
 for MCDG in $(awk -F "," '/1.A.1/{print $1}' ../query-IVC-nac/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m.tif.vat.csv | sed -e s/\"//g)
 do
     IUCNCAT=$(awk  -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '/'$MCDG'/{ print $5" AS mg_hierarc, "$22" as IUCN_CAT, "$23" as IUCN_BOUNDS, "$24" as IUCN_criteria" }' ../macrogroups_global.csv| sed -e s/NA/NULL/g)
+    FILENAME=$(awk  -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '/'$MCDG'/{ print $4 }' ../macrogroups_global.csv| sed -e s/ /-/g)
+    echo $FILENAME
 
     gdal_calc.py -A $WORKDIR/IVC_NS_v7_270m_robin.tif \
     --outfile=M${MCDG}.tif \
