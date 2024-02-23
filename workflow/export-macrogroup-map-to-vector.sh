@@ -26,9 +26,13 @@ ogr2ogr -f CSV query-IVC-sam \
 mkdir -p vector-data-potential-dist
 mkdir $WORKDIR/vector-data-potential-dist
 
+awk -F "," '/1.A.[1-4]/{print $1}' query-IVC-sam/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m.tif.vat.csv | sed -e s/\"//g > list.mcdgs
+awk -F "," '/1.A.[1-4]/{print $1}' query-IVC-nac/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m.tif.vat.csv | sed -e s/\"//g >> list.mcdgs
+
 cd vector-data-potential-dist
 
-for MCDG in $(awk -F "," '/1.A.2/{print $1}' ../query-IVC-sam/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m.tif.vat.csv | sed -e s/\"//g)
+
+for MCDG in $(cat ../list.mcdgs)
 do
     IUCNCAT=$(awk  -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '/'$MCDG'/{ print $5" AS mg_hierarc, "$22" as IUCN_CAT, "$23" as IUCN_BOUNDS, "$24" as IUCN_criteria" }' ../macrogroups_global.csv| sed -e s/NA/NULL/g)
     FILENAME=$(awk  -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '/'$MCDG'/{ print $5 }' ../macrogroups_global.csv| sed -e s/\ /-/g | tr -d \")
