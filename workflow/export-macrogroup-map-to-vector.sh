@@ -27,7 +27,8 @@ mkdir -p $WORKDIR/raster-data-potential-dist
 mkdir -p $WORKDIR/vector-data-potential-dist
 
 cd $WORKDIR
-awk -F "," '/1.B.[1-4]/{print $4}' query-IVC-nac/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m.tif.vat.csv | sed -e s/\"//g > list.mcdgs
+awk -F "," '/1.B.[1-4]/{print $4}' query-IVC-sam/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m.tif.vat.csv | sed -e s/\"//g > list.mcdgs
+awk -F "," '/1.B.[1-4]/{print $4}' query-IVC-nac/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m.tif.vat.csv | sed -e s/\"//g >> list.mcdgs
 awk -F "," '/1.A.[1-4]/{print $4}' query-IVC-nac/NorthAmerica_Caribbean_IVC_MacroGroups_potential_NatureServe_v5_270m.tif.vat.csv | sed -e s/\"//g >> list.mcdgs
 awk -F "," '/1.A.[1-4]/{print $4}' query-IVC-sam/SouthAmerica_IVC_MacroGroups_potential_NatureServe_v7_270m.tif.vat.csv | sed -e s/\"//g >> list.mcdgs
 
